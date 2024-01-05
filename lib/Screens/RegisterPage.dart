@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:untitled/services/fireStore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -8,12 +10,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  var _auth = FirebaseAuth.instance;
+  var email;
+  var password;
+  var username;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: SafeArea(child: Column(
+        body: SafeArea(
+            child: Column(
           children: [
             Container(
               margin: EdgeInsets.only(top: 30),
@@ -21,9 +28,23 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Colors.white,
               child: const Column(
                 children: [
-                  Text("Sign Up", style: TextStyle(fontSize: 50, fontWeight: FontWeight.w700, color: Colors.black),),
-                  SizedBox(height: 5,),
-                  Text("Healthy - Personal Health Guider", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Color(0xFF9A9A9A)),),
+                  Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Healthy - Personal Health Guider",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF9A9A9A)),
+                  ),
                 ],
               ),
             ),
@@ -44,11 +65,20 @@ class _RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
               child: Column(
                 children: [
-                  const Text("Create your account",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black), ),
-                  SizedBox(height: 30,),
+                  const Text(
+                    "Create your account",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
                   TextField(
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: (context){
+                    onChanged: (context) {
+                      username = context;
                     },
                     decoration: InputDecoration(
                       label: Text('Username'),
@@ -59,10 +89,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextField(
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: (context){
+                    onChanged: (context) {
+                      email = context;
                     },
                     decoration: InputDecoration(
                       label: Text('Email'),
@@ -73,10 +106,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextField(
-                    onChanged: (context){
-
+                    onChanged: (context) {
+                      password = context;
                     },
                     obscureText: true,
                     decoration: InputDecoration(
@@ -88,8 +123,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 40,),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -97,10 +133,31 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     height: 50,
                     width: double.infinity,
+                    child: GestureDetector(
+                      onTap: ()async {
+                        if(email != null && password != null){
+                          var res = await registerUser(name: username, email: email, password: password);
+                         if(res.code == 200){
+                           Navigator.pushNamed(context, "/details");
+                         }
+                        }else{
+                          print("Fill All details");
+                        }
 
-                    child: Center(child: Text("Get Started", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),)),
+                        // Register function should implemented
+                      },
+                        child: Center(
+                            child: Text(
+                      "Get Started",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ))),
                   ),
-                  SizedBox(height: 35,),
+                  SizedBox(
+                    height: 35,
+                  ),
                   Container(
                     child: Image.asset('images/pic5.png'),
                   ),

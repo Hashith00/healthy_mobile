@@ -22,7 +22,7 @@ void main() async{
       "/login" : (context) => LoginScreen(),
       "/register" : (context) => RegisterPage(),
       "/details" : (context) => DetailsPage(),
-      "home" : (context) => Home()
+      "/home" : (context) => Home()
     },
 
   ));

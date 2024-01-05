@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/services/fireStore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DetailsPage extends StatefulWidget {
   DetailsPage({super.key});
@@ -10,30 +10,14 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  final FirebaseCrud createacc = FirebaseCrud();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  get uid => _auth!.currentUser!.uid;
 
-  Response n1 = Response();
+
   double _height = 200;
-  int _age = 0;
+  int age = 0;
   double _weight = 50;
 
-  // Getting massages from the database
-  void getMassages() async {
-    final employees = await _firestore.collection("Employee").get();
-    for (var massage in employees.docs) {
-      print(massage.data()["contact_no"]);
-    }
-  }
-
-  // Getting massage using data streems
-  void massageStreems() async {
-    await for (var snapshot in _firestore.collection("Employee").snapshots()) {
-      for (var massage in snapshot.docs) {
-        print(massage.data());
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +51,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (context) {
-                        _age = int.parse(context);
+                        age = int.parse(context);
                       },
                       decoration: InputDecoration(
                         label: Text('Age'),
@@ -190,15 +174,16 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // try{
-                      //   n1 = await createacc.addEmployee(name: "name", position: "position", contactno: "contactno");
-                      //   print(n1.message);
-                      // }catch(e){
-                      //   print(e);
-                      // }
-                      //getMassages();
-                      Navigator.pushNamed(context, "home");
+                    onTap: () async {
+
+
+                      try{
+                        print(uid);
+                        var res = await addHealthRecords(age: age, height: _height, weight: _weight, docId: uid);
+                        print(res);
+                      }catch(e){
+                        print(e);
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -217,35 +202,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       )),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      StreamBuilder<QuerySnapshot>(
-                        stream: _firestore.collection("Employee").snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) { // Use hasData instead of != null
-                            final messages = snapshot.data!.docs;
-                            List<Text> messagesList = []; // Use camelCase for variable names
 
-                            for (var message in messages) {
-                              final messageData = message.data() as Map<String, dynamic>; // Explicit cast
-                              final messageText = messageData["position"];
-                              messagesList.add(Text(messageText));
-                            }
-
-                            return Column(
-                              children: messagesList,
-                            );
-                          } else if (snapshot.hasError) { // Handle the error case
-                            return Text("Error: ${snapshot.error}");
-                          } else {
-                            return CircularProgressIndicator(); // Show a loading indicator
-                          }
-                        },
-                      ),
-                    ],
-                  )
 
                 ],
               ),

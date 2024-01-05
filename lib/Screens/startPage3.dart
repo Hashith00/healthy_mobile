@@ -62,7 +62,7 @@ class _StartingPagethreeState extends State<StartingPagethree> {
                       const SizedBox(height: 40,),
                       GestureDetector(
                         onTap: (){
-                          Navigator.pushNamed(context, "/login");
+                          Navigator.pushNamed(context, "/register");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 30),
