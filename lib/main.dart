@@ -7,6 +7,7 @@ import 'Screens/LoginPage.dart';
 import 'Screens/RegisterPage.dart';
 import 'Screens/DetailsPage.dart';
 import 'Screens/HomeScreen.dart';
+import 'Screens/GetHealthRecordScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async{
@@ -22,6 +23,7 @@ void main() async{
       "/login" : (context) => LoginScreen(),
       "/register" : (context) => RegisterPage(),
       "/details" : (context) => DetailsPage(),
+      "/gethealthrecord" : (context) => GethealthRecord(),
       "/home" : (context) => Home()
     },
 
