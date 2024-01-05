@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/services/fireStore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GethealthRecord extends StatefulWidget {
   const GethealthRecord({super.key});
@@ -8,6 +10,8 @@ class GethealthRecord extends StatefulWidget {
 }
 
 class _GethealthRecordState extends State<GethealthRecord> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  get uid => _auth!.currentUser!.uid;
   var BloodPressure;
   var BloodSugar;
   var CholesterolLevel;
@@ -111,7 +115,7 @@ class _GethealthRecordState extends State<GethealthRecord> {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         onChanged: (context) {
-                          CholesterolLevel = context;
+                          HeartRate = context;
                         },
                         decoration: InputDecoration(
                           label: Text('Heart Rate'),
@@ -125,18 +129,32 @@ class _GethealthRecordState extends State<GethealthRecord> {
                     ),
                   ],
                 ),
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.black,
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: Center(
-                    child: Text("Proceed", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),),
-                  ),
+                GestureDetector(
+                  onTap: ()async {
+                    print(CholesterolLevel);
+                    print(BloodSugar);
+                    print(BloodPressure);
+                    print(HeartRate);
+                      try{
+                        var res = await addHealthrecords(bloodpressure: int.parse(BloodPressure), bloodsugure: int.parse(BloodSugar), cholestorollevel: int.parse(CholesterolLevel), hartrate: int.parse(HeartRate), docId: uid);
+                        print(res);
+                      }catch(e){
+                        print(e);
+                      }
+                  },
+                  child: Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black,
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Center(
+                      child: Text("Proceed", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),),
+                    ),
 
+                  ),
                 )
               ],
 
