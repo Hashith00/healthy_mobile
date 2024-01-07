@@ -49,7 +49,7 @@ loginUser ({required String email, required String password})async{
 }
 
 // Details adding page
-addHealthRecords({
+addUserDetails({
   required int age,
   required double height,
   required double weight,
@@ -80,6 +80,44 @@ addHealthRecords({
 
   return response.message;
 }
+
+// Adding health records
+addHealthrecords({
+  required int bloodpressure,
+  required int bloodsugure,
+  required int cholestorollevel,
+  required int hartrate,
+  required String docId,
+}) async {
+
+  QuerySnapshot querySnapshot = await _Collection.where('uid', isEqualTo: docId).get();
+  docId = querySnapshot.docs.first.id;
+
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _Collection.doc(docId);
+
+  var data = <String, dynamic>{
+    "blood pressure": bloodpressure,
+    "blood sugar": bloodsugure,
+    "cholesterol level": cholestorollevel,
+    "heart rate": hartrate,
+  };
+
+  try {
+    await documentReferencer.update(data);
+    response.code = 200;
+    response.message = "Updated the user";
+  } catch (e) {
+    response.code = 500;
+    response.message = "Error updating user: $e";
+  }
+
+  return response.message;
+}
+
+
+
 
 class Employee{
   String? uid;

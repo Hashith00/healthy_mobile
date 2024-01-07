@@ -179,8 +179,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
                       try{
                         print(uid);
-                        var res = await addHealthRecords(age: age, height: _height, weight: _weight, docId: uid);
+                        var res = await addUserDetails(age: age, height: _height, weight: _weight, docId: uid);
                         print(res);
+                        Navigator.pushNamed(context, '/gethealthrecord');
                       }catch(e){
                         print(e);
                       }
