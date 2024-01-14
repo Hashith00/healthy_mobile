@@ -60,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
 
                   },
                   decoration: InputDecoration(
-                    label: Text('10'),
+                    label: Text('Age'),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -86,7 +86,7 @@ class _EditProfileState extends State<EditProfile> {
 
                       },
                       decoration: InputDecoration(
-                        label: Text('120'),
+                        label: Text('Blood Pressure'),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -111,7 +111,7 @@ class _EditProfileState extends State<EditProfile> {
 
                       },
                       decoration: InputDecoration(
-                        label: Text('150'),
+                        label: Text('Heart Rate'),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -136,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
 
                       },
                       decoration: InputDecoration(
-                        label: Text('120'),
+                        label: Text('Blood Sugar'),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -161,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
 
                       },
                       decoration: InputDecoration(
-                        label: Text('130'),
+                        label: Text('Choleserol'),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(

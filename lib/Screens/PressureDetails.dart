@@ -23,16 +23,16 @@ class _PressureDeatilsState extends State<PressureDeatils> {
     var user = auth.currentUser;
     var userdetails = await getUser(uid: user!.uid);
     print(userdetails['blood pressure'].runtimeType);
-    if((userdetails['blood pressure'])< 200){
+    if((userdetails['blood pressure'])> 80 && (userdetails['blood pressure'])< 120){
       setState(() {
         condition = "Good Condition";
         color = Colors.green.shade400;
       });
 
-    }else{
+    }else if((userdetails['blood pressure'])>  120 && (userdetails['blood pressure'])< 200){
       setState(() {
-        condition = "In Margin";
-        color = Colors.yellow.shade700;
+        condition = "Seek Emergency Care";
+        color = Colors.red.shade700;
       });
     }
 
@@ -94,7 +94,8 @@ class _PressureDeatilsState extends State<PressureDeatils> {
                     children: [
                       Container(
                         height: 100,
-                        child: Image.asset('images/bp.png'),
+                        width: 60,
+                        child: Image.asset('images/heart.png'),
                       ),
                       Text(
                         "Blood Pressure",

@@ -23,7 +23,7 @@ class _HeartrateDetailsState extends State<HeartrateDetails> {
     var user = auth.currentUser;
     var userdetails = await getUser(uid: user!.uid);
     print(userdetails['heart rate'].runtimeType);
-    if((userdetails['heart rate'])< 200){
+    if((userdetails['heart rate'])> 60 && (userdetails['heart rate'])< 100){
         setState(() {
           condition = "Good Condition";
           color = Colors.green.shade400;
@@ -31,8 +31,8 @@ class _HeartrateDetailsState extends State<HeartrateDetails> {
 
     }else{
       setState(() {
-        condition = "In Margin";
-        color = Colors.yellow.shade700;
+        condition = "Not in good condition";
+        color = Colors.red.shade700;
       });
     }
 
@@ -94,10 +94,11 @@ class _HeartrateDetailsState extends State<HeartrateDetails> {
                     children: [
                       Container(
                         height: 100,
-                        child: Image.asset('images/bp.png'),
+                        width: 60,
+                        child: Image.asset('images/heart.png'),
                       ),
                       Text(
-                        "Blood Pressure",
+                        "Heart Rate",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 35),
                       )

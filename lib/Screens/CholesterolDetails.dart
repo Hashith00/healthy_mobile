@@ -22,22 +22,27 @@ class _CholesterolDeatilsState extends State<CholesterolDeatils> {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     var userdetails = await getUser(uid: user!.uid);
-    print(userdetails['cholesterol level'].runtimeType);
+    print(userdetails['cholesterol level']);
     if((userdetails['cholesterol level'])< 200){
       setState(() {
         condition = "Good Condition";
         color = Colors.green.shade400;
       });
 
-    }else{
+    }else if((userdetails['cholesterol level'])> 200){
       setState(() {
         condition = "In Margin";
         color = Colors.yellow.shade700;
       });
+    }else{
+      setState(() {
+        condition = "Over the Limit";
+        color = Colors.red.shade700;
+      });
     }
 
     var tips = await getHealthTips(id: user!.uid, condition: 'cholesterol level');
-    print(tips[0].runtimeType);
+    print(tips);
     for(String tip in tips){
       setState(() {
         entries.add(tip);

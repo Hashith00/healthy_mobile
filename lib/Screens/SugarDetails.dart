@@ -22,17 +22,17 @@ class _SugarDeatilsState extends State<SugarDeatils> {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     var userdetails = await getUser(uid: user!.uid);
-    print(userdetails['blood pressure'].runtimeType);
-    if((userdetails['blood pressure'])< 200){
+    print(userdetails['blood sugar'].runtimeType);
+    if((userdetails['blood sugar'])< 100){
       setState(() {
         condition = "Good Condition";
         color = Colors.green.shade400;
       });
 
-    }else{
+    }else if((userdetails['blood sugar']) > 126){
       setState(() {
-        condition = "In Margin";
-        color = Colors.yellow.shade700;
+        condition = "Diabetes Conditions";
+        color = Colors.yellow.shade900;
       });
     }
 
@@ -94,10 +94,10 @@ class _SugarDeatilsState extends State<SugarDeatils> {
                     children: [
                       Container(
                         height: 100,
-                        child: Image.asset('images/bp.png'),
+                        child: Image.asset('images/bs.png'),
                       ),
                       Text(
-                        "Blood Pressure",
+                        "Blood Sugar",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 35),
                       )
