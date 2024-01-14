@@ -39,6 +39,11 @@ dependencies:
   http: ^1.1.0
   firebase_auth: ^4.15.2
   cloud_firestore: ^4.13.5
+  modal_progress_hud_nsn: ^0.4.0
+  flutter_dotenv: ^5.1.0
+  shimmer: ^3.0.0
+  awesome_snackbar_content: 0.1.3
+
 
 
 dev_dependencies:
@@ -75,6 +80,15 @@ flutter:
     - images/pic3.png
     - images/pic4.png
     - images/pic5.png
+    - .env
+    - images/pblue.png
+    - images/pgreen.png
+    - images/porange.png
+    - images/pred.png
+    - images/bs.png
+    - images/bp.png
+    - images/heart.png
+    - images/background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

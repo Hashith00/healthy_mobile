@@ -8,7 +8,11 @@ import 'Screens/RegisterPage.dart';
 import 'Screens/DetailsPage.dart';
 import 'Screens/HomeScreen.dart';
 import 'Screens/GetHealthRecordScreen.dart';
+import 'Screens/PressureDetails.dart';
+import 'Screens/CholesterolDetails.dart';
+import 'Screens/SugarDetails.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Screens/HeartRateDetails.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +28,10 @@ void main() async{
       "/register" : (context) => RegisterPage(),
       "/details" : (context) => DetailsPage(),
       "/gethealthrecord" : (context) => GethealthRecord(),
+      '/heart' :(context) => HeartrateDetails(),
+      "/pressure" : (context) => PressureDeatils(),
+      "/cholesterol" : (context) =>CholesterolDeatils(),
+      '/sugar' : (context) => SugarDeatils(),
       "/home" : (context) => Home()
     },
 

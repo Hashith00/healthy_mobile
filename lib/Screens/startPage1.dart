@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/services/fireStore.dart';
 
 class StartingPageOne extends StatefulWidget {
   const StartingPageOne({super.key});
@@ -64,6 +65,7 @@ class _StartimgPageOneState extends State<StartingPageOne> {
                         GestureDetector(
                           onTap: (){
                             Navigator.pushNamed(context, '/start2');
+
                           },
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 30),

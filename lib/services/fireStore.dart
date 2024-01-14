@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -21,8 +25,7 @@ registerUser({required String name, required String email, required String passw
       Map<String, dynamic> data = <String, dynamic>{
         'uid' : res.user!.uid,
         "name": name,
-        "email": email,
-        "password" : password
+        "email": email
       };
       var result = await documentReferencer.set(data).whenComplete(() {
         response.code = 200;
@@ -82,12 +85,55 @@ addUserDetails({
 }
 
 // Adding health records
+updateHealthrecords({
+  required int bloodpressure,
+  required int bloodsugure,
+  required int cholestorollevel,
+  required int hartrate,
+  required String docId,
+  required double height,
+  required double weight,
+
+}) async {
+
+  QuerySnapshot querySnapshot = await _Collection.where('uid', isEqualTo: docId).get();
+  docId = querySnapshot.docs.first.id;
+
+  updateUserList(bloodpressure: bloodpressure, bloodsugure: bloodsugure, cholestorollevel: cholestorollevel, hartrate: hartrate, docId: docId);
+
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _Collection.doc(docId);
+
+  var data = <String, dynamic>{
+    "blood pressure": bloodpressure,
+    "blood sugar": bloodsugure,
+    "cholesterol level": cholestorollevel,
+    "heart rate": hartrate,
+    'weight' : weight,
+    'height' : height
+  };
+
+  try {
+    await documentReferencer.update(data);
+    response.code = 200;
+    response.message = "Updated the user";
+  } catch (e) {
+    response.code = 500;
+    response.message = "Error updating user: $e";
+  }
+
+  return response.message;
+}
+
+
 addHealthrecords({
   required int bloodpressure,
   required int bloodsugure,
   required int cholestorollevel,
   required int hartrate,
   required String docId,
+
 }) async {
 
   QuerySnapshot querySnapshot = await _Collection.where('uid', isEqualTo: docId).get();
@@ -170,3 +216,176 @@ class FirebaseCrud {
 
 
 }
+
+getOpneai({required String? prompt}) async{
+  await dotenv.load();
+  final responce = await http.post(
+    Uri.parse("https://api.openai.com/v1/chat/completions"),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization" : "Bearer ${dotenv.env['token']}"
+    },
+    body: jsonEncode({
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful assistant."
+        },
+        {
+          "role": "user",
+          "content": "$prompt"
+        }
+      ]
+    })
+  );
+  print(json.decode(responce.body)['choices'][0]['message']['content']);
+  var para = (json.decode(responce.body)['choices'][0]['message']['content']).split(RegExp(r'\d+\.'));
+  para = para.map((sentence) => sentence.trim()).toList();
+  return para;
+
+
+
+}
+
+
+getUser({required String uid})async{
+  final employees =  await _firestore.collection("Employee").get();
+  for(var employee in employees.docs){
+    if(employee.data()["uid"] == uid){
+      return employee.data();
+    }
+  }
+}
+
+
+// Not in use Currently
+saveTips(List<String> usernames, String docId)async {
+  QuerySnapshot querySnapshot = await _Collection.where('uid', isEqualTo: docId).get();
+  docId = querySnapshot.docs.first.id;
+
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _Collection.doc(docId);
+  var data = <String, dynamic>{
+    "tips": usernames,
+  };
+
+  try {
+    await documentReferencer.update(data);
+    response.code = 200;
+    response.message = "Updated the user";
+  } catch (e) {
+    response.code = 500;
+    response.message = "Error updating user: $e";
+  }
+  return response.message;
+}
+
+
+
+Future<List<String>> getHealthTips({required String id, required String condition}) async {
+  final employees = await _firestore.collection("Employee").get();
+
+  for (var employee in employees.docs) {
+    if (employee.data()['uid'] == id) {
+      String prompt =
+          "My $condition is ${employee.data()['$condition']}. Give me 3 health tips regarding my blood pressure value. Give me those three tips as separate 3 paragraphs. One paragraphs only contains one sentence. Sentence must have maximum 5 words";
+      dynamic openaiResponse = await getOpneai(prompt: prompt);
+
+      List<String> stringList = [];
+      if (openaiResponse is Iterable) {
+        stringList = List<String>.from(openaiResponse.map((item) => item.toString()));
+      } else {
+
+        stringList = [openaiResponse.toString()];
+      }
+
+      return stringList;
+    }
+  }
+
+
+  return [];
+}
+
+
+Future<List<String>> getMealPlan({required String id}) async {
+  final employees = await _firestore.collection("Employee").get();
+
+  for (var employee in employees.docs) {
+    if (employee.data()['uid'] == id) {
+      String prompt =
+          "Give me a meal plan for one day. Give it as separate three part for breakfast, lunch and dinner in separate sections. Don't include emojis.";
+      dynamic openaiResponse = await getOpneai(prompt: prompt);
+
+
+      List<String> stringList = [];
+      if (openaiResponse is Iterable) {
+        stringList = List<String>.from(openaiResponse.map((item) => item.toString()));
+      } else {
+
+        stringList = [openaiResponse.toString()];
+      }
+
+      return stringList;
+    }
+  }
+
+
+  return [];
+
+}
+
+updateUserList(
+{required int bloodpressure,
+  required int bloodsugure,
+  required int cholestorollevel,
+  required int hartrate,
+  required String docId,}
+    )async{
+  final employees = await _firestore.collection("Employee").get();
+  
+  for(var employee in employees.docs){
+    if(employee.data()['id'] == docId){
+      List<dynamic> bloodpressureList = [];
+      List<dynamic> bloodSugarList = [];
+      if(employee.data()['blood pressure list'] == null){
+        bloodpressureList.add(bloodpressure);
+        bloodSugarList.add(bloodsugure);
+      }else{
+        bloodpressureList = [...employee.data()['blood pressure list']];
+        bloodSugarList = [...employee.data()['blood sugar list']];
+      }
+
+
+
+      Response response = Response();
+      DocumentReference documentReferencer =
+      _Collection.doc(docId);
+
+      var data = <String, dynamic>{
+        "blood pressure list": bloodpressureList,
+        "blood sugar list": bloodSugarList,
+
+      };
+      try{
+        await documentReferencer.update(data);
+        print("Successfully Created the List");
+      }catch(e){
+        print(e);
+      }
+    }
+  }
+  
+  
+
+
+
+
+
+
+
+
+}
+
