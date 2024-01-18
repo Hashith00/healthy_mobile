@@ -211,6 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     email: email,
                                     password: password);
                                 if (res.code == 200) {
+                                  print("${res.code}");
                                   Navigator.pushNamed(context, "/details");
                                 }
                                 setState(() {

@@ -22,11 +22,11 @@ class _PressureDeatilsState extends State<PressureDeatils> {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     var userdetails = await getUser(uid: user!.uid);
-    print(userdetails['blood pressure'].runtimeType);
-    if((userdetails['blood pressure'])> 80 && (userdetails['blood pressure'])< 120){
+    print(userdetails['blood pressure']);
+    if((userdetails['blood pressure'])> 80 && (userdetails['blood pressure'])<= 120){
       setState(() {
         condition = "Good Condition";
-        color = Colors.green.shade400;
+        color = Colors.blue.shade400;
       });
 
     }else if((userdetails['blood pressure'])>  120 && (userdetails['blood pressure'])< 200){
@@ -109,7 +109,7 @@ class _PressureDeatilsState extends State<PressureDeatils> {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: color),
+                        color: Colors.blue),
                     child: Text(
                       "$condition",
                       style: TextStyle(

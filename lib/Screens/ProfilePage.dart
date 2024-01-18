@@ -66,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         MaterialPageRoute(
                           builder: (context) => LoginScreen(),
                         ));
+
                   },
                   child: Container(
                     decoration: BoxDecoration(
