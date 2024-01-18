@@ -9,17 +9,39 @@ FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _Collection = _firestore.collection('Employee');
 
-
+// Created the classes
 class Response{
   int? code;
   String? message;
+  // Add the constructor
   Response({this.code,this.message});
+}
+
+class User{
+  String? name;
+  int? age;
+  String? email;
+  String? password;
+  String? Uid;
+}
+
+class HealthData{
+  double? height;
+  double? weight;
+  String? bloodPressure;
+  String? cholesterolLevel;
+  String? bloodSugar;
+  String? heartRate;
 }
 
 // regiter functionality
 registerUser({required String name, required String email, required String password}) async{
   DocumentReference documentReferencer = _Collection.doc();
   Response response = Response();
+  User user1 = User();
+  user1.email = email;
+  user1.name = name;
+  user1.password = password;
   try{
       var res = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       Map<String, dynamic> data = <String, dynamic>{
@@ -29,19 +51,21 @@ registerUser({required String name, required String email, required String passw
       };
       var result = await documentReferencer.set(data).whenComplete(() {
         response.code = 200;
-        response.message  = "Login Successfull";
+        response.message  = "Registration Successfully";
       }).catchError((e){
         response.code = 201;
-        response.message = "resistration Nusuccessfull;";
+        response.message = "Registration Failed;";
       });
     return response;
   }catch(e){
-    return e;
+    response.code = 201;
+    response.message = "$e";
+    return response;
   }
 
 }
 
-// TODO : Need make some improvements
+
 loginUser ({required String email, required String password})async{
   try{
     var res =await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -290,7 +314,7 @@ Future<List<String>> getHealthTips({required String id, required String conditio
   for (var employee in employees.docs) {
     if (employee.data()['uid'] == id) {
       String prompt =
-          "My $condition is ${employee.data()['$condition']}. Give me 3 health tips regarding my blood pressure value. Give me those three tips as separate 3 paragraphs. One paragraphs only contains one sentence. Sentence must have maximum 5 words";
+          "My $condition is ${employee.data()['$condition']}. Give me 3 health tips regarding my ${employee.data()['$condition']} value. Give me those three tips as separate 3 paragraphs. One paragraphs only contains one sentence. Sentence must have maximum 5 words";
       dynamic openaiResponse = await getOpneai(prompt: prompt);
 
       List<String> stringList = [];
@@ -377,15 +401,27 @@ updateUserList(
       }
     }
   }
-  
-  
 
+}
+// Delete a User
+deleteUser({
+required String docId,
+}) async {
+Response response = Response();
+DocumentReference documentReferencer =
+_Collection.doc(docId);
 
+await documentReferencer
+    .delete()
+    .whenComplete((){
+response.code = 200;
+response.message = "Sucessfully Deleted User";
+})
+    .catchError((e) {
+response.code = 500;
+response.message = e;
+});
 
-
-
-
-
-
+return response;
 }
 

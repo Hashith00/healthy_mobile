@@ -15,8 +15,8 @@ class PressureDeatils extends StatefulWidget {
 class _PressureDeatilsState extends State<PressureDeatils> {
   bool content = false;
   List<String> entries = [];
-  var condition;
-  var color = Colors.white;
+  var condition = '';
+  var color = Colors.black54;
 
   getdata ()async{
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,13 +26,13 @@ class _PressureDeatilsState extends State<PressureDeatils> {
     if((userdetails['blood pressure'])> 80 && (userdetails['blood pressure'])<= 120){
       setState(() {
         condition = "Good Condition";
-        color = Colors.blue.shade400;
+        color = Color(0x1A006EE9);
       });
 
     }else if((userdetails['blood pressure'])>  120 && (userdetails['blood pressure'])< 200){
       setState(() {
         condition = "Seek Emergency Care";
-        color = Colors.red.shade700;
+        color = Colors.red;
       });
     }
 
@@ -138,10 +138,12 @@ class _PressureDeatilsState extends State<PressureDeatils> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Color(0xFF006EE9)),
                                     color: color),
+
                                 child: Center(
                                   child: Container(
-                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.white, fontSize: 16),),
+                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.black54, fontSize: 18),),
                                   ),
                                 ),
                               );

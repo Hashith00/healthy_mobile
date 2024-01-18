@@ -113,7 +113,7 @@ class _CholesterolDeatilsState extends State<CholesterolDeatils> {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: color),
+                        color: Color(0xFF05DC01)),
                     child: Text(
                       "$condition",
                       style: TextStyle(
@@ -142,10 +142,10 @@ class _CholesterolDeatilsState extends State<CholesterolDeatils> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: color),
+                                    color: Color(0x1A05DC01)),
                                 child: Center(
                                   child: Container(
-                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.white, fontSize: 16),),
+                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.black, fontSize: 16),),
                                   ),
                                 ),
                               );

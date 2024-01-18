@@ -17,8 +17,9 @@ class _ProfilePageState extends State<ProfilePage> {
   var name = '';
   var email = '';
   var auth = FirebaseAuth.instance;
+  var uid;
   getUserDetails()async{
-    var uid = auth.currentUser!.uid;
+    uid = auth.currentUser!.uid;
     user = await getUser(uid: uid);
     setState(() {
       name = user['name'];
@@ -45,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  child: Image.asset('images/background.png',fit: BoxFit.cover,),
+                  child: Image.asset('images/Clipped.png',fit: BoxFit.cover,),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -73,14 +74,38 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    margin: EdgeInsets.fromLTRB(20, 80, 20, 0),
+                    margin: EdgeInsets.fromLTRB(20, 400, 20, 0),
                     height: 50,
                     width: double.infinity,
                     child: Center(
                       child: Text("Logout", style: TextStyle(fontSize: 18, color: Colors.white),),
                     ),
                   ),
-                )
+                ),
+                GestureDetector(
+                  onTap: ()async{
+                    var res = await deleteUser(docId: uid);
+                    print(res.message);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    height: 50,
+                    width: double.infinity,
+                    child: Center(
+                      child: Text("Delete Account", style: TextStyle(fontSize: 18, color: Colors.white),),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

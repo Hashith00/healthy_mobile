@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-  void showFailedLoginDialog(BuildContext context) {
+  void showFailedRegisterDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -20,8 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          title: Text(
-            'Login Failed',
+          title: const Text(
+            'Registration Failed',
             style: TextStyle(
               color: Colors.red,
               fontWeight: FontWeight.bold,
@@ -29,15 +29,15 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           content: Container(
             height: 100,
-            child: Column(
+            child: const Column(
               children: [
                 Text(
                   'Invalid username or password. Please try again.',
                   style: TextStyle(
-                    fontSize: 16.0, // Set the font size
+                    fontSize: 16.0,
                   ),
                 ),
-                SizedBox(height: 10), // Add some spacing between the text and other widgets
+                SizedBox(height: 10),
                 Icon(
                   Icons.warning,
                   color: Colors.yellow, // Set the color of the warning icon
@@ -205,22 +205,34 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() {
                                 _saving = true;
                               });
-                              if (email != null && password != null && username != null) {
-                                var res = await registerUser(
-                                    name: username,
-                                    email: email,
-                                    password: password);
-                                if (res.code == 200) {
-                                  print("${res.code}");
-                                  Navigator.pushNamed(context, "/details");
+                              try{
+                                if (email != null && password != null && username != null) {
+                                  var res = await registerUser(
+                                      name: username,
+                                      email: email,
+                                      password: password);
+                                 //print(res.code);
+                                  if (res.code == 200) {
+                                    print("${res.code}");
+                                    Navigator.pushNamed(context, "/details");
+                                  }else if(res.code == 201){
+                                    showFailedRegisterDialog(context);
+                                  }
+                                  setState(() {
+                                    _saving = false;
+                                  });
+                                } else {
+                                  showFailedRegisterDialog(context);
+                                  setState(() {
+                                    _saving = false;
+                                  });
+                                  print("Fill All details");
                                 }
-                                setState(() {
-                                  _saving = false;
-                                });
-                              } else {
-                                showAboutDialog(context: context);
-                                print("Fill All details");
+                              }catch(e){
+                                //print(e);
+                                showFailedRegisterDialog(context);
                               }
+
 
                               // Register function should implemented
                             },

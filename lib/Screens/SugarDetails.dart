@@ -108,7 +108,7 @@ class _SugarDeatilsState extends State<SugarDeatils> {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: color),
+                        color: Color(0xFFE79B38)),
                     child: Text(
                       "$condition",
                       style: TextStyle(
@@ -137,10 +137,10 @@ class _SugarDeatilsState extends State<SugarDeatils> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: color),
+                                    color: Color(0X1AE79B38)),
                                 child: Center(
                                   child: Container(
-                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.white, fontSize: 16),),
+                                    child: Text('${entries[index]}', style: TextStyle(color: Colors.black, fontSize: 18),),
                                   ),
                                 ),
                               );

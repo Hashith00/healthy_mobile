@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:untitled/Screens/HomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,6 +9,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
@@ -54,6 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                setState(() {
+                  _saving = false;
+                });
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text(
@@ -186,7 +191,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             final user = await _auth.signInWithEmailAndPassword(
                                 email: email, password: password);
                             if (user != null) {
-                              Navigator.pushNamed(context, '/home');
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                              );
+                              //Navigator.pushNamed(context, '/home');
                               setState(() {
                                 _saving = false;
                               });
@@ -197,6 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               _saving = false;
                             });
                             showFailedLoginDialog(context);
+
                             print('Failed with error code: ${e}');
                           }
                         },

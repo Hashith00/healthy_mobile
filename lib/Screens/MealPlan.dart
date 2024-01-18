@@ -55,6 +55,19 @@ class _MealPalnState extends State<MealPaln> {
           blur: 3.5,
           child: SafeArea(
             child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    Color(0xFF16FADF),
+                    Colors.white,
+                    Colors.white,
+                    Colors.white
+                  ],
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Column(
                 children: [
